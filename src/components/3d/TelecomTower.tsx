@@ -1,18 +1,17 @@
 
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-export default function TelecomTower(props: any) {
-  const meshRef = useRef<THREE.Group>(null);
+const TelecomTower: React.FC<{ position?: [number, number, number], scale?: [number, number, number] }> = (props) => {
+  const { position = [0, 0, 0], scale = [1, 1, 1] } = props;
+  const groupRef = useRef<THREE.Group>(null);
   
-  // Simple tower model created with primitives
   useFrame((state) => {
-    if (meshRef.current) {
+    if (groupRef.current) {
       // Gentle rotation
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(
-        meshRef.current.rotation.y,
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
         state.mouse.x * Math.PI * 0.2,
         0.1
       );
@@ -20,7 +19,7 @@ export default function TelecomTower(props: any) {
   });
 
   return (
-    <group ref={meshRef} {...props} dispose={null}>
+    <group ref={groupRef} position={position} scale={scale}>
       {/* Base of the tower */}
       <mesh position={[0, -2, 0]} castShadow receiveShadow>
         <boxGeometry args={[2, 0.5, 2]} />
@@ -52,12 +51,14 @@ export default function TelecomTower(props: any) {
       ))}
       
       {/* Signal waves */}
-      {[1, 2, 3].map((scale, i) => (
-        <mesh key={i} position={[0, 8, 0]} scale={[scale, scale, scale]} renderOrder={-1}>
+      {[1, 2, 3].map((radius, i) => (
+        <mesh key={i} position={[0, 8, 0]} scale={[radius, radius, radius]}>
           <torusGeometry args={[1, 0.02, 16, 32]} />
           <meshBasicMaterial color="#FF7F4D" transparent opacity={0.3 - i * 0.1} side={THREE.DoubleSide} />
         </mesh>
       ))}
     </group>
   );
-}
+};
+
+export default TelecomTower;
