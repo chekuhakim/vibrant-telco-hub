@@ -1,6 +1,7 @@
 
 import { ArrowDownCircle } from 'lucide-react';
 import CustomButton from '../ui/CustomButton';
+import TelecomScene from '../3d/TelecomScene';
 
 const Hero = () => {
   const scrollToContent = () => {
@@ -12,15 +13,11 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-50 to-white"></div>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-1/4 right-20 w-64 h-64 rounded-full bg-orange-300/10 animate-float"></div>
-        <div className="absolute bottom-1/4 left-20 w-48 h-48 rounded-full bg-orange-200/20 animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 rounded-full bg-orange-100/30 animate-float" style={{ animationDelay: '1s' }}></div>
-      </div>
+      {/* 3D Background */}
+      <TelecomScene />
+      
+      {/* Gradient overlay for better text visibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-orange-50/70 via-orange-50/50 to-white/80 -z-5"></div>
 
       <div className="container px-4 md:px-6 space-y-12 z-10">
         <div className="text-center max-w-4xl mx-auto animate-slide-down">
