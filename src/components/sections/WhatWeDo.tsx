@@ -1,5 +1,5 @@
 
-import { Radio, Share2, Tower } from 'lucide-react';
+import { Radio, Share2, RadioTower } from 'lucide-react';
 import { motion } from 'framer-motion';
 import CustomButton from '../ui/CustomButton';
 
@@ -37,7 +37,7 @@ const WhatWeDo = () => {
             className="glass-card p-8 rounded-xl flex flex-col items-center text-center"
           >
             <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-6">
-              <Tower className="h-8 w-8 text-primary" />
+              <RadioTower className="h-8 w-8 text-primary" />
             </div>
             <h3 className="text-xl font-semibold mb-4">Infrastructure Provider</h3>
             <p className="text-muted-foreground">
