@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { toast } from "sonner";
 import { Cell, GameState } from './types';
@@ -51,8 +52,8 @@ export const useGameState = ({ onScoreUpdate, onGameComplete }: UseGameStateProp
     
     onScoreUpdate(newScore);
     
-    // Check if game is complete
-    if (newScore >= 80) {
+    // Check if game is complete - changed from 80 to 50
+    if (newScore >= 50) {
       toast.success("Victory! The town thrives in harmony.");
       onGameComplete(true);
     } else {
@@ -61,12 +62,15 @@ export const useGameState = ({ onScoreUpdate, onGameComplete }: UseGameStateProp
     }
     
     // Bonus: All houses and businesses have at least some signal
-    const allConnected = calculateScore(boardWithSignals, row, col) >= boardWithSignals.flat().filter(cell => 
+    const allConnected = boardWithSignals.flat().filter(cell => 
+      (cell.type === 'house' || cell.type === 'business') && 
+      (cell.signalStrength === 'good' || cell.signalStrength === 'weak')
+    ).length === boardWithSignals.flat().filter(cell => 
       cell.type === 'house' || cell.type === 'business'
-    ).length * 5;
+    ).length;
     
     if (allConnected) {
-      toast.success("Bonus: All buildings connected! +20 points");
+      toast.success("Bonus: All buildings connected! +30 points");
     }
   };
 

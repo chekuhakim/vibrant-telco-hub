@@ -1,3 +1,4 @@
+
 import { Cell } from "./types";
 
 // Initialize the 10x10 game board
@@ -109,19 +110,19 @@ export const calculateScore = (boardState: Cell[][], towerRow: number, towerCol:
           // Houses too close: -10 points
           totalScore -= 10;
         } else if (distance <= 5) {
-          // Houses at good distance: +5 points
-          totalScore += 5;
+          // Houses at good distance: +15 points (increased from 5)
+          totalScore += 15;
           housesWithSignal++;
         }
       } else if (cellType === 'business') {
         totalBusinesses++;
         if (distance <= 3) {
-          // Businesses close: +10 points
-          totalScore += 10;
+          // Businesses close: +20 points (increased from 10)
+          totalScore += 20;
           businessesWithSignal++;
         } else if (distance <= 6) {
-          // Businesses at medium distance: +5 points
-          totalScore += 5;
+          // Businesses at medium distance: +10 points (increased from 5)
+          totalScore += 10;
           businessesWithSignal++;
         }
       }
@@ -131,7 +132,7 @@ export const calculateScore = (boardState: Cell[][], towerRow: number, towerCol:
   // Bonus: All houses and businesses have at least some signal
   const allConnected = housesWithSignal === totalHouses && businessesWithSignal === totalBusinesses;
   if (allConnected) {
-    totalScore += 20;
+    totalScore += 30; // Increased from 20
   }
   
   return totalScore;

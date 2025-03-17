@@ -99,26 +99,26 @@ const SignalSamurai: React.FC = () => {
                       <li className="flex items-start gap-2">
                         <House className="h-5 w-5 text-purple-500 mt-0.5" />
                         <span>
-                          <span className="font-medium">Houses:</span> Too close (≤2 tiles): -10 pts | Good (3-5 tiles): +5 pts
+                          <span className="font-medium">Houses:</span> Too close (≤2 tiles): -10 pts | Good (3-5 tiles): +15 pts
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Building2 className="h-5 w-5 text-orange-500 mt-0.5" />
                         <span>
-                          <span className="font-medium">Businesses:</span> Close (≤3 tiles): +10 pts | Medium (4-6 tiles): +5 pts
+                          <span className="font-medium">Businesses:</span> Close (≤3 tiles): +20 pts | Medium (4-6 tiles): +10 pts
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-green-500 font-bold">+</span>
                         <span>
-                          <span className="font-medium">Bonus:</span> +20 pts if all buildings have signal!
+                          <span className="font-medium">Bonus:</span> +30 pts if all buildings have signal!
                         </span>
                       </li>
                     </ul>
                   </div>
                   
                   <div className="border-t pt-2">
-                    <p className="text-sm">You need a score of <span className="font-bold">80 or higher</span> to win.</p>
+                    <p className="text-sm">You need a score of <span className="font-bold">50 or higher</span> to win.</p>
                     <p className="text-sm mt-2">Choose wisely, you can only place the tower once!</p>
                   </div>
                 </div>
