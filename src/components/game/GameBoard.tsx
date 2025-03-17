@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import GridCell, { CellType, SignalStrength } from './GridCell';
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export interface Cell {
   type: CellType;
