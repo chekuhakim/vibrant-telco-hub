@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { toast } from "sonner";
 import { Cell, GameState } from './types';
-import { initializeBoard, updateSignalStrengths, calculateScore } from './gameUtils';
+import { initializeBoard, updateSignalStrengths, calculateScore, findBestTowerPosition } from './gameUtils';
 
 interface UseGameStateProps {
   onScoreUpdate: (score: number) => void;
@@ -16,6 +15,8 @@ export const useGameState = ({ onScoreUpdate, onGameComplete }: UseGameStateProp
     towerPosition: null,
     score: 0
   });
+  
+  const [showingBestPosition, setShowingBestPosition] = useState(false);
 
   const handleCellClick = (row: number, col: number) => {
     // If tower is already placed or cell is not empty, do nothing
@@ -76,13 +77,53 @@ export const useGameState = ({ onScoreUpdate, onGameComplete }: UseGameStateProp
       towerPosition: null,
       score: 0
     });
+    setShowingBestPosition(false);
     onScoreUpdate(0);
     toast.info("Game reset! Place your tower strategically.");
+  };
+  
+  const showBestPosition = () => {
+    if (gameState.towerPlaced) {
+      toast.info("You've already placed your tower. Reset the game to try again.");
+      return;
+    }
+    
+    const [bestRow, bestCol] = findBestTowerPosition(gameState.board);
+    
+    // Update the board to show the best position
+    const newBoard = [...gameState.board];
+    
+    // If we're already showing best position, hide it
+    if (showingBestPosition) {
+      setShowingBestPosition(false);
+      toast.info("Best position hint hidden.");
+      setGameState({
+        ...gameState,
+        board: initializeBoard()
+      });
+      return;
+    }
+    
+    // Otherwise, show the best position
+    const boardWithSignals = updateSignalStrengths(newBoard, bestRow, bestCol);
+    
+    // Calculate what score would be achieved
+    const potentialScore = calculateScore(boardWithSignals, bestRow, bestCol);
+    
+    setShowingBestPosition(true);
+    setGameState({
+      ...gameState,
+      board: boardWithSignals
+    });
+    
+    toast.success(`Best position hint: Row ${bestRow}, Col ${bestCol} with score ${potentialScore}`);
   };
 
   return {
     gameState,
     handleCellClick,
-    resetGame
+    resetGame,
+    showBestPosition,
+    showingBestPosition
   };
 };

@@ -1,4 +1,3 @@
-
 import { Cell } from "./types";
 
 // Initialize the 10x10 game board
@@ -136,4 +135,28 @@ export const calculateScore = (boardState: Cell[][], towerRow: number, towerCol:
   }
   
   return totalScore;
+};
+
+// Find the optimal tower position
+export const findBestTowerPosition = (board: Cell[][]): [number, number] => {
+  let bestScore = -Infinity;
+  let bestPosition: [number, number] = [0, 0];
+  
+  // Try every possible position
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
+      // Skip if cell is not empty
+      if (board[row][col].type !== 'empty') {
+        continue;
+      }
+      
+      const score = calculateScore(board, row, col);
+      if (score > bestScore) {
+        bestScore = score;
+        bestPosition = [row, col];
+      }
+    }
+  }
+  
+  return bestPosition;
 };
