@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, forwardRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Line } from '@react-three/drei';
@@ -11,12 +11,10 @@ interface NodeProps {
   isHovered?: boolean;
 }
 
-const Node: React.FC<NodeProps> = ({ position, color, size = 0.3, isHovered }) => {
-  const ref = useRef<THREE.Mesh>(null);
-  
+const Node = forwardRef<THREE.Mesh, NodeProps>(({ position, color, size = 0.3, isHovered }, ref) => {
   // Pulse animation
   useFrame(({ clock }) => {
-    if (ref.current) {
+    if (ref && 'current' in ref && ref.current) {
       if (isHovered) {
         ref.current.scale.setScalar(1 + Math.sin(clock.getElapsedTime() * 3) * 0.1);
       } else {
@@ -38,7 +36,9 @@ const Node: React.FC<NodeProps> = ({ position, color, size = 0.3, isHovered }) =
       />
     </mesh>
   );
-};
+});
+
+Node.displayName = 'Node';
 
 interface ConnectionProps {
   start: [number, number, number];
@@ -64,9 +64,9 @@ const Connection: React.FC<ConnectionProps> = ({ start, end, active }) => {
 
 const NetworkVisualization: React.FC = () => {
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
-  const { raycaster, camera, mouse, viewport } = useThree();
+  const { raycaster, camera, mouse } = useThree();
   const groupRef = useRef<THREE.Group>(null);
-  const nodesRef = useRef<THREE.Object3D[]>([]);
+  const nodesRef = useRef<Array<THREE.Mesh | null>>([]);
 
   // Create network structure
   const { nodes, connections } = useMemo(() => {
@@ -131,8 +131,11 @@ const NetworkVisualization: React.FC = () => {
     // Reset raycaster
     raycaster.setFromCamera(mouse, camera);
     
+    // Filter out null values and create an array of valid meshes
+    const validNodes = nodesRef.current.filter(node => node !== null) as THREE.Mesh[];
+    
     // Get all intersections
-    const intersects = raycaster.intersectObjects(nodesRef.current);
+    const intersects = raycaster.intersectObjects(validNodes);
     
     // If we found an intersection
     if (intersects.length > 0) {
@@ -170,10 +173,8 @@ const NetworkVisualization: React.FC = () => {
             color={isServerNode ? '#ff7f4d' : '#4d8fff'}
             size={isServerNode ? 0.4 : 0.25}
             isHovered={hoveredNode === idx}
-            ref={(el: any) => {
-              if (el) {
-                nodesRef.current[idx] = el;
-              }
+            ref={el => {
+              nodesRef.current[idx] = el;
             }}
           />
         );
@@ -185,6 +186,7 @@ const NetworkVisualization: React.FC = () => {
         color="#ff5a1f" 
         size={0.6}
         isHovered={false}
+        ref={el => {}}
       />
     </group>
   );
